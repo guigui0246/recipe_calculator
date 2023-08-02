@@ -1,0 +1,1 @@
+DEFAULT_RECIPE_DESCRIPTION = """{0}: Recipe changing {1} into {2} using {3} (that's {4} needed) in {5}."""
