@@ -1,0 +1,9 @@
+Name: Oven
+
+Description: An oven to turn dust into ingots
+
+Result: coal
+
+Crafter: fast_oven
+
+Speed: x2

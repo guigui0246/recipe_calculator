@@ -2,6 +2,10 @@ Legend for files
 
 Default names: recipe|crafter.path.name
 
+Duration format: (0<?)d(0<?<24)h(0<?<60)m(float<60)s (0 are NOT needed)
+
+Speed format: x?
+
 -------------------------------------------
 
 Recipe format (name.recipe) :
@@ -16,7 +20,7 @@ Result: \<ressources given when the craft is finished (if missing it is consider
 
 Crafter: \<machine needed to make\\accelerate the craft (if missing only the ressources are needed)\>
 
-Crafter needed: <True/False>
+Crafter needed: <True/False (false if missing)>
 
 Duration: \<duration of the craft (if missing it is instant)\>
 

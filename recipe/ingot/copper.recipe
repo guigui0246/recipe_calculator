@@ -1,0 +1,11 @@
+Name: Copper Ingot
+
+Description: Ingot of copper made from burning copper dust
+
+Ressources: copper_dust
+Result: copper_ingot
+
+Crafter: slow_oven, oven, fast_oven
+Crafter needed: True
+
+Duration: 1s
