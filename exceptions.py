@@ -1,0 +1,1 @@
+RECIPE_EXCEPTIONS = [".git"]
