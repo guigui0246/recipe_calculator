@@ -1,6 +1,7 @@
-def get_recipes():
-    from exceptions import RECIPE_EXCEPTIONS
-    from recipe import Recipe
+from exceptions import RECIPE_EXCEPTIONS
+from recipe import Recipe
+
+def get_recipes() -> list[Recipe]:
     filelist = []
     recipe_list = []
     try:
@@ -8,8 +9,7 @@ def get_recipes():
         paths = [os.getcwd() + "/recipe"]
         while not len(paths) == 0:
             actual_path = paths.pop()
-            print(actual_path)
-            filelist = filelist + [os.path.join(actual_path, f) for f in os.listdir(actual_path) if os.path.isfile(os.path.join(actual_path, f)) and f.endswith(".recipe")]
+            filelist = filelist + [os.path.join(actual_path, f) for f in os.listdir(actual_path) if os.path.isfile(os.path.join(actual_path, f)) and f.endswith(".recipe") and f not in RECIPE_EXCEPTIONS]
             paths = paths + [os.path.join(actual_path, f) for f in os.listdir(actual_path) if f not in RECIPE_EXCEPTIONS and not os.path.isfile(os.path.join(actual_path, f))]
     except:
         filelist = []
@@ -22,9 +22,10 @@ def get_recipes():
         print("Aucune recette trouvée", file=sys.stderr)
     return recipe_list
 
-def get_crafter():
-    from exceptions import CRAFTER_EXCEPTIONS
-    from crafter import Crafter
+from exceptions import CRAFTER_EXCEPTIONS
+from crafter import Crafter
+
+def get_crafter() -> list[Crafter]:
     filelist = []
     crafter_list = []
     try:
@@ -32,8 +33,7 @@ def get_crafter():
         paths = [os.getcwd() + "/crafter"]
         while not len(paths) == 0:
             actual_path = paths.pop()
-            print(actual_path)
-            filelist = filelist + [os.path.join(actual_path, f) for f in os.listdir(actual_path) if os.path.isfile(os.path.join(actual_path, f)) and f.endswith(".crafter")]
+            filelist = filelist + [os.path.join(actual_path, f) for f in os.listdir(actual_path) if os.path.isfile(os.path.join(actual_path, f)) and f.endswith(".crafter") and f not in CRAFTER_EXCEPTIONS]
             paths = paths + [os.path.join(actual_path, f) for f in os.listdir(actual_path) if f not in CRAFTER_EXCEPTIONS and not os.path.isfile(os.path.join(actual_path, f))]
     except:
         filelist = []
