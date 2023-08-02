@@ -30,21 +30,21 @@ class Inventory():
     def __repr__(self) -> str:
         return "{\n" + str(self.content).replace(", ", "\n").removeprefix("[").removesuffix("]") + "\n}\n"
 
-    def sub(self, Item:Item) -> None:
-        name = Item.get_name()
+    def sub(self, item:Item) -> None:
+        name = item.get_name()
         for e in self.content:
             if type(e) == Item and e.get_name() == name:
-                e -= Item.get_quantity()
+                e -= item.get_quantity()
                 return
-        self.content.append(Item)
+        self.content.append(item)
 
-    def add(self, Item:Item) -> None:
-        name = Item.get_name()
+    def add(self, item:Item) -> None:
+        name = item.get_name()
         for e in self.content:
             if type(e) == Item and e.get_name() == name:
-                e += Item.get_quantity()
+                e += item.get_quantity()
                 return
-        self.content.append(Item)
+        self.content.append(item)
 
     def __add__(self, other:Inventory) -> Inventory:
         self.add(other)

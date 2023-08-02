@@ -5,6 +5,7 @@ crafters = get_crafter()
 from loader import get_inv
 inventory = get_inv()
 
-print(recipes, crafters)
+print(recipes, crafters, inventory, sep="\n")
 
-def find_best_recipe(ressource:str)
+def find_best_recipe(ressource:str):
+    pass

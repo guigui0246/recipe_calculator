@@ -51,6 +51,7 @@ from inventory import Inventory
 from inventory import Item
 
 def separate_number_name(string:str):
+    string = string.replace(" ", "").replace("\n", "")
     a = 0
     b = 0
     c = 0
@@ -89,6 +90,7 @@ def get_inv() -> Inventory:
         f = file.readlines()
         for e in f:
             try:
-                Inventory.add(Item(separate_number_name(e)))
+                inventory.add(Item(*separate_number_name(e)))
             except:
                 continue
+    return inventory
