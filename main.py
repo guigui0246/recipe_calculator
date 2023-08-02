@@ -1,7 +1,10 @@
 from loader import get_recipes
-
-print(get_recipes())
-
+recipes = get_recipes()
 from loader import get_crafter
+crafters = get_crafter()
+from loader import get_inv
+inventory = get_inv()
 
-print(get_crafter())
+print(recipes, crafters)
+
+def find_best_recipe(ressource:str)

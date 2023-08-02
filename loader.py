@@ -45,3 +45,50 @@ def get_crafter() -> list[Crafter]:
         import sys
         print("Aucune machine trouvée", file=sys.stderr)
     return crafter_list
+
+from exceptions import INVENTORY_EXCEPTIONS
+from inventory import Inventory
+from inventory import Item
+
+def separate_number_name(string:str):
+    a = 0
+    b = 0
+    c = 0
+    number = 1
+    start = False
+    end = False
+    tmp = ""
+    while string[0].isdigit():
+        a = a*10 + int(string[0])
+        start = True
+        tmp += string[0]
+        string = string[1:]
+    if start and string[0] == "x":
+        string = string[1:]
+        number *= a
+    else:
+        string = tmp + string
+    del tmp
+    tmp = ""
+    while string[-1].isdigit():
+        b = b + int(string[-1]) * (10 ** c)
+        c += 1
+        end = True
+        tmp += string[-1]
+        string = string[:-1]
+    if end and string[-1] == "x":
+        string = string[:-1]
+        number *= b
+    else:
+        string = string + tmp
+    return string, number
+
+def get_inv() -> Inventory:
+    inventory = Inventory()
+    with open("inventory.item") as file:
+        f = file.readlines()
+        for e in f:
+            try:
+                Inventory.add(Item(separate_number_name(e)))
+            except:
+                continue
