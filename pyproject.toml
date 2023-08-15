@@ -1,0 +1,5 @@
+[tool.pytest.ini_options]
+markers = [
+    "time_to_sec: Change time string to float",
+    "sec_to_time: Change float to time string",
+]
