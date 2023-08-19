@@ -82,6 +82,8 @@ def separate_number_name(string:str):
         number *= b
     else:
         string = string + tmp
+    if string in INVENTORY_EXCEPTIONS:
+        raise PermissionError("Not allowed to load this inventory item")
     return string, number
 
 def get_inv() -> Inventory:
