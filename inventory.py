@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class Item():
     def __init__(self, name:str, quantity:int=1) -> None:
         self.name = name
@@ -36,7 +39,7 @@ class Inventory():
             if type(e) == Item and e.get_name() == name:
                 e -= item.get_quantity()
                 return
-        self.content.append(item)
+        self.content.append(Item(name, -item.get_quantity()))
 
     def add(self, item:Item) -> None:
         name = item.get_name()
@@ -47,9 +50,14 @@ class Inventory():
         self.content.append(item)
 
     def __add__(self, other:Inventory) -> Inventory:
-        self.add(other)
+        for i in other:
+            self.add(i)
         return self
 
     def __sub__(self, other:Inventory) -> Inventory:
-        self.sub(other)
+        for i in other:
+            self.sub(i)
         return self
+
+    def __iter__(self):
+        return self.content.__iter__()
