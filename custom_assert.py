@@ -26,7 +26,16 @@ if __name__ == "__main__":
             continue
         if "log" in i:
             continue
-        import_str = import_str + f"from {i} import *\n"
+        import_str = import_str + f"""
+try:
+    from {i} import *
+except:
+    pass
+try:
+    import {i}
+except:
+    pass
+"""
 
     test = {}
     pass_count = 0
@@ -69,4 +78,11 @@ if __name__ == "__main__":
     print(color, end="")
     print(string_bar[:-1] + "|" + string_end, end="")
     print("\033[0m", end="\n")
+    
+    if percent != 100:
+        s = SystemExit("Not all test passed")
+        s.code = 1
+        raise s
+    
+    exit(0)
 
