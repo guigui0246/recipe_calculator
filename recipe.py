@@ -8,10 +8,68 @@ class Recipe():
         self.results = {}
         self.duration = 0
         self.crafter_needed = False
-        self.crafter = {}
+        self.crafter:list[str] = []
         from stime import sec_to_time
-        self.description = DEFAULT_RECIPE_DESCRIPTION.format(self.name, self.ressources, self.results, self.crafter, "" if self.crafter_needed else "not", sec_to_time(self.duration))
-        pass
+        self._load()
+        try:
+            self.description
+        except:
+            self.description = DEFAULT_RECIPE_DESCRIPTION.format(self.name, self.ressources, self.results, self.crafter, "" if self.crafter_needed else "not", sec_to_time(self.duration))
+
+    def _load(self):
+        last=""
+        for i in self.info.splitlines():
+            i = i.strip()
+            if i.startswith("Description:") or (last == "description" and not i.startswith("Name:") and not i.startswith("Ressources:") and not i.startswith("Result:") and not i.startswith("Crafter:") and not i.startswith("Crafter needed:") and not i.startswith("Duration:")):
+                try:
+                    self.description += i.removeprefix("Description:").strip() + "\n"
+                except AttributeError:
+                    self.description = i.removeprefix("Description:").strip() + "\n"
+                last = "description"
+            if i == "":
+                continue
+            if i.startswith("Name:"):
+                self.name = i.removeprefix("Name:").strip()
+                last = "name"
+            if i.startswith("Ressources:") or (last == "ressource" and not i.startswith("Name:") and not i.startswith("Ressources:") and not i.startswith("Result:") and not i.startswith("Crafter:") and not i.startswith("Crafter needed:") and not i.startswith("Duration:")):
+                last = "ressource"
+                from loader import separate_number_name
+                key,value = separate_number_name(i.removeprefix("Ressources:").strip())
+                try:
+                    self.ressources[key] += value
+                except KeyError:
+                    self.ressources[key] = value
+            if i.startswith("Result:") or (last == "result" and not i.startswith("Name:") and not i.startswith("Ressources:") and not i.startswith("Result:") and not i.startswith("Crafter:") and not i.startswith("Crafter needed:") and not i.startswith("Duration:")):
+                last = "result"
+                from loader import separate_number_name
+                key,value = separate_number_name(i.removeprefix("Result:").strip())
+                try:
+                    self.results[key] += value
+                except KeyError:
+                    self.results[key] = value
+            if i.startswith("Crafter:") or (last == "crafter" and not i.startswith("Name:") and not i.startswith("Ressources:") and not i.startswith("Result:") and not i.startswith("Crafter:") and not i.startswith("Crafter needed:") and not i.startswith("Duration:")):
+                last = "crafter"
+                list = i.removeprefix("Crafter:").strip().split(",")
+                for e in list:
+                    if ";" in e:
+                        list.remove(e)
+                        list += e.strip().split(";")
+                self.crafter += list
+            if i.startswith("Crafter needed:"):
+                last = "crafter_need"
+                self.crafter_needed = bool(i.removeprefix("Crafter needed:").strip())
+            if i.startswith("Duration:"):
+                last = "duration"
+                import stime
+                self.duration = stime.time_to_sec(i.removeprefix("Duration:").strip())
+        try:
+            self.description.strip()
+        except AttributeError:
+            pass
+        for i in range(len(self.crafter)):
+            self.crafter[i] = self.crafter[i].strip()
+        while "" in self.crafter:
+            self.crafter.remove("")
 
     def __repr__(self) -> str:
         return f"{self.name}"
