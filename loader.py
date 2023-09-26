@@ -15,11 +15,12 @@ def get_recipes() -> list[Recipe]:
         filelist = []
     for path in filelist:
         with open(path) as file:
-            f = file.readlines()
+            f = file.read()
         recipe_list.append(Recipe(path, f))
     if len(recipe_list) < 1:
         import sys
         print("Aucune recette trouvée", file=sys.stderr)
+        exit(2)
     return recipe_list
 
 from exceptions import CRAFTER_EXCEPTIONS
