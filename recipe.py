@@ -77,7 +77,8 @@ class Recipe():
     def infos(self) -> str:
         return self.description
 
-    def produce(self, ressource:str|None=None) -> bool | dict:
+    def produce(self, ressource:str|None=None) -> bool | dict[str, float]:
+        "Return if a ressource is produced. If ressource is None return the dict of produced ressources"
         if ressource == None:
             dct = {}
             for i in self.results.keys():
@@ -98,7 +99,7 @@ class Recipe():
             self.results[ressource]
         except KeyError:
             return False
-        if self.results[ressource] < 1:
+        if self.results[ressource] <= 0:
             return False
         try:
             self.ressources[ressource]
@@ -107,7 +108,8 @@ class Recipe():
         else:
             return self.results[ressource] > self.ressources[ressource]
 
-    def uses(self, ressource:str|None=None):
+    def uses(self, ressource:str|None=None) -> bool | dict[str, float]:
+        "Return if a ressource is used. If ressource is None return the dict of used ressources"
         if ressource == None:
             dct = {}
             for i in self.ressources.keys():
@@ -128,7 +130,7 @@ class Recipe():
             self.ressources[ressource]
         except KeyError:
             return False
-        if self.ressources[ressource] < 1:
+        if self.ressources[ressource] <= 0:
             return False
         try:
             self.results[ressource]
