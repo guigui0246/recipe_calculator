@@ -69,10 +69,24 @@ class Recipe():
         for i in range(len(self.crafter)):
             self.crafter[i] = self.crafter[i].strip()
         while "" in self.crafter:
-            self.crafter.remove("")
+            self.crafteself.remove("")
 
     def __repr__(self) -> str:
         return f"{self.name}"
 
     def infos(self) -> str:
         return self.description
+
+    def produce(self, ressource:str):
+        try:
+            self.results[ressource]
+        except KeyError:
+            return False
+        if self.results[ressource] < 1:
+            return False
+        try:
+            self.ressources[ressource]
+        except KeyError:
+            return True
+        else:
+            return self.results[ressource] > self.ressources[ressource]
