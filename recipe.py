@@ -69,7 +69,7 @@ class Recipe():
         for i in range(len(self.crafter)):
             self.crafter[i] = self.crafter[i].strip()
         while "" in self.crafter:
-            self.crafteself.remove("")
+            self.crafter.remove("")
 
     def __repr__(self) -> str:
         return f"{self.name}"
