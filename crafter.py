@@ -14,7 +14,7 @@ class Crafter():
             self.description
         except:
             from stime import sec_to_time
-            self.description = DEFAULT_CRAFTER_DESCRIPTION.format(self.name, self.ressources, self.results, self.speed, self.duration, sec_to_time(self.duration))
+            self.description = DEFAULT_CRAFTER_DESCRIPTION.format(self.name, self.ressources, self.results, self.speed, self.duration, ("+" + sec_to_time(self.duration)) if self.duration >= 0 else ("-" + sec_to_time(-self.duration)))
 
 
     def _load(self):
