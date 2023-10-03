@@ -42,6 +42,7 @@ def test_duration():
 @pytest.mark.recipe_loading
 def test_description():
     assert Recipe(os.getcwd() + "/name.recipe", "Description: Ingot of copper").description == "Ingot of copper"
+    assert Recipe(os.getcwd() + "/name.recipe", "Description: Ingot of copper\n\nAnd of copper\n").description == "Ingot of copper\n\nAnd of copper"
     from default import DEFAULT_RECIPE_DESCRIPTION
     from stime import sec_to_time
     a = Recipe(os.getcwd() + "/name.recipe", "This is a text")

@@ -3,4 +3,5 @@ markers = [
     "time_to_sec: Change time string to float",
     "sec_to_time: Change float to time string",
     "recipe_loading: Loading of the recipe object",
+    "crafter_loading: Loading of the crafter object",
 ]
