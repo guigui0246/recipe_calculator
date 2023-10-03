@@ -28,6 +28,8 @@ class Recipe():
                 last = "description"
             if i == "":
                 continue
+            if i.strip() == "Crafter needed":
+                self.crafter_needed = True
             if i.startswith("Name:"):
                 self.name = i.removeprefix("Name:").strip()
                 last = "name"
@@ -57,7 +59,10 @@ class Recipe():
                 self.crafter += liste
             if i.startswith("Crafter needed:"):
                 last = "crafter_need"
-                self.crafter_needed = bool(i.removeprefix("Crafter needed:").strip())
+                if (i.removeprefix("Crafter needed:").strip() == "False") or (i.removeprefix("Crafter needed:").strip() == "0"):
+                    self.crafter_needed = False
+                else:
+                    self.crafter_needed = bool(i.removeprefix("Crafter needed:").strip())
             if i.startswith("Duration:"):
                 last = "duration"
                 import stime
