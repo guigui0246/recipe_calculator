@@ -49,12 +49,12 @@ class Recipe():
                     self.results[key] = value
             if i.startswith("Crafter:") or (last == "crafter" and not i.startswith("Name:") and not i.startswith("Ressources:") and not i.startswith("Result:") and not i.startswith("Crafter:") and not i.startswith("Crafter needed:") and not i.startswith("Duration:")):
                 last = "crafter"
-                list = i.removeprefix("Crafter:").strip().split(",")
-                for e in list:
+                liste = i.removeprefix("Crafter:").strip().split(",")
+                for e in liste:
                     if ";" in e:
-                        list.remove(e)
-                        list += e.strip().split(";")
-                self.crafter += list
+                        liste.remove(e)
+                        liste += e.strip().split(";")
+                self.crafter += liste
             if i.startswith("Crafter needed:"):
                 last = "crafter_need"
                 self.crafter_needed = bool(i.removeprefix("Crafter needed:").strip())
@@ -64,6 +64,8 @@ class Recipe():
                 self.duration = stime.time_to_sec(i.removeprefix("Duration:").strip())
         try:
             self.description.strip()
+            if len(self.description) > 0 and self.description[-1] == '\n':
+                self.description = self.description[:-1]
         except AttributeError:
             pass
         for i in range(len(self.crafter)):

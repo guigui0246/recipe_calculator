@@ -17,15 +17,15 @@ def test_info():
 
 @pytest.mark.recipe_loading
 def test_results():
-    assert Recipe(os.getcwd() + "/name.recipe", "Result: copper_dust").results == {"copper_dust"}
+    assert Recipe(os.getcwd() + "/name.recipe", "Result: copper_dust").results == {"copper_dust": 1}
 
 @pytest.mark.recipe_loading
 def test_crafter():
-    assert Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven").crafter == {"fast_oven"}
+    assert Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven").crafter == ["fast_oven"]
 
 @pytest.mark.recipe_loading
 def test_ressource():
-    assert Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust").ressources == {"copper_dust"}
+    assert Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust").ressources == {"copper_dust": 1}
 
 @pytest.mark.recipe_loading
 def test_crafter_needed():
