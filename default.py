@@ -1,1 +1,2 @@
 DEFAULT_RECIPE_DESCRIPTION = """{0}: Recipe changing {1} into {2} using {3} (that's {4} needed) in {5}."""
+DEFAULT_CRAFTER_DESCRIPTION = """{0}: Uses {1} more and gives {2} more. It will multiply speed by {3} and then add {4}"""

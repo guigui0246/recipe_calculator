@@ -48,4 +48,4 @@ def test_description():
     from default import DEFAULT_CRAFTER_DESCRIPTION
     from stime import sec_to_time
     a = Crafter(os.getcwd() + "/name.crafter", "This is a text")
-    assert a.infos() == a.description == DEFAULT_CRAFTER_DESCRIPTION.format(a.name, a.ressources, a.results, a.crafter, "" if a.crafter_needed else "not", sec_to_time(a.duration))
+    assert a.infos() == a.description == DEFAULT_CRAFTER_DESCRIPTION.format(a.name, a.ressources, a.results, a.speed, a.duration, sec_to_time(a.duration))

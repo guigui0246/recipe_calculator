@@ -9,11 +9,11 @@ class Recipe():
         self.duration = 0
         self.crafter_needed = False
         self.crafter:list[str] = []
-        from stime import sec_to_time
         self._load()
         try:
             self.description
         except:
+            from stime import sec_to_time
             self.description = DEFAULT_RECIPE_DESCRIPTION.format(self.name, self.ressources, self.results, self.crafter, "" if self.crafter_needed else "not", sec_to_time(self.duration))
 
     def _load(self):

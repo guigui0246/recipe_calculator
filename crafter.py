@@ -1,5 +1,6 @@
 class Crafter():
     def __init__(self, path:str, line:str) -> None:
+        from default import DEFAULT_CRAFTER_DESCRIPTION
         import os
         self.name = path.removeprefix(os.getcwd()).replace("\\",".").replace("/",".").removesuffix(".crafter").removeprefix(".")
         self.info = line
@@ -9,6 +10,12 @@ class Crafter():
         self.duration = 0
         self.speed = 1
         self._load()
+        try:
+            self.description
+        except:
+            from stime import sec_to_time
+            self.description = DEFAULT_CRAFTER_DESCRIPTION.format(self.name, self.ressources, self.results, self.speed, self.duration, sec_to_time(self.duration))
+
 
     def _load(self):
         last=""
@@ -63,6 +70,8 @@ class Crafter():
                             pass
         try:
             self.description.strip()
+            if len(self.description) > 0 and self.description[-1] == '\n':
+                self.description = self.description[:-1]
         except AttributeError:
             pass
 
