@@ -30,6 +30,7 @@ def test_ressource():
 @pytest.mark.crafter_loading
 def test_speed():
     assert Crafter(os.getcwd() + "/name.crafter", "Speed: x3").speed == 3
+    assert Crafter(os.getcwd() + "/name.crafter", "Duration: x3").speed == 3
     assert Crafter(os.getcwd() + "/name.crafter", "Speed: 0.3x").speed == 0.3
     assert Crafter(os.getcwd() + "/name.crafter", "Speed: 0.3x10").speed == 3
     assert Crafter(os.getcwd() + "/name.crafter", "").speed == 1
@@ -38,8 +39,9 @@ def test_speed():
 def test_duration():
     import const
     from stime import time_to_sec
+    assert Crafter(os.getcwd() + "/name.crafter", f"Speed: +1{const.DAY_STRING}1{const.MINUTE_STRING}").duration == time_to_sec(f"1{const.DAY_STRING}1{const.MINUTE_STRING}")
     assert Crafter(os.getcwd() + "/name.crafter", f"Duration: +1{const.DAY_STRING}1{const.MINUTE_STRING}").duration == time_to_sec(f"1{const.DAY_STRING}1{const.MINUTE_STRING}")
-    assert Crafter(os.getcwd() + "/name.crafter", f"Duration: -1{const.DAY_STRING}4{const.MINUTE_STRING}").duration == -time_to_sec(f"1{const.DAY_STRING}4{const.MINUTE_STRING}")
+    assert Crafter(os.getcwd() + "/name.crafter", f"Speed: -1{const.DAY_STRING}4{const.MINUTE_STRING}").duration == -time_to_sec(f"1{const.DAY_STRING}4{const.MINUTE_STRING}")
 
 @pytest.mark.crafter_loading
 def test_description():

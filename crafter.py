@@ -53,19 +53,19 @@ class Crafter():
                     raise SyntaxError("multiple ids for the same crafter")
                 last = "crafter"
                 self.crafter = i.removeprefix("Crafter:").strip()
-            if i.startswith("Speed:"):
+            if i.startswith("Speed:") or i.startswith("Duration:"):
                 last = "speed"
-                e = i.removeprefix("Speed:").strip()
+                e = i.removeprefix("Speed:").removeprefix("Duration:").strip()
                 if e.startswith("+"):
                     import stime
-                    self.duration += stime.time_to_sec()
+                    self.duration += stime.time_to_sec(e[1:].strip())
                 elif e.startswith("-"):
                     import stime
-                    self.duration -= stime.time_to_sec()
+                    self.duration -= stime.time_to_sec(e[1:].strip())
                 else:
                     for l in e.split("x"):
                         try:
-                            self.speed *= float(l)
+                            self.speed *= float(l.strip())
                         except:
                             pass
         try:
