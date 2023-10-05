@@ -23,6 +23,11 @@ def test_results():
 def test_crafter():
     assert Crafter(os.getcwd() + "/name.crafter", "Crafter: fast_oven").crafter == "fast_oven"
 
+@pytest.mark.time_to_sec
+def test_m_not_in_range_to_sec():
+    with pytest.raises(SyntaxError):
+        Crafter(os.getcwd() + "/name.crafter", "Crafter: fast_oven\nCrafter: oven\n")
+
 @pytest.mark.crafter_loading
 def test_ressource():
     assert Crafter(os.getcwd() + "/name.crafter", "Ressources: copper_dust").ressources == {"copper_dust": 1}
@@ -51,3 +56,11 @@ def test_description():
     from stime import sec_to_time
     a = Crafter(os.getcwd() + "/name.crafter", "This is a text")
     assert a.infos() == a.description == DEFAULT_CRAFTER_DESCRIPTION.format(a.name, a.ressources, a.results, a.speed, a.duration, sec_to_time(a.duration))
+
+#
+# Utilisation
+#
+
+@pytest.mark.crafter
+def test_repr():
+    assert repr(Crafter(os.getcwd() + "/name.crafter", f"")) == "name"

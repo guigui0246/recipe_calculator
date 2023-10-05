@@ -6,5 +6,6 @@ markers = [
     "crafter_loading: Loading of the crafter object",
     "item: Methods of the item object",
     "inventory: Methods of the inventory object",
+    "debug: Debug functions",
 ]
 addopts = "-p no:warnings --cov=. --cov-report term-missing"
