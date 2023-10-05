@@ -56,9 +56,19 @@ def test_neg_to_sec():
         time_to_sec("-1h")
 
 @pytest.mark.time_to_sec
-def test_not_in_range_to_sec():
+def test_s_not_in_range_to_sec():
+    with pytest.raises(ValueError):
+        time_to_sec(f"{SECONDES_PER_MINUTES + 1}s")
+
+@pytest.mark.time_to_sec
+def test_m_not_in_range_to_sec():
     with pytest.raises(ValueError):
         time_to_sec(f"{MINUTES_PER_HOURS + 15}m")
+
+@pytest.mark.time_to_sec
+def test_h_not_in_range_to_sec():
+    with pytest.raises(ValueError):
+        time_to_sec(f"{HOURS_PER_DAY + 10}h")
 
 @pytest.mark.time_to_sec
 def test_multiple_to_sec():
