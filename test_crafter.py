@@ -52,6 +52,7 @@ def test_duration():
 def test_description():
     assert Crafter(os.getcwd() + "/name.crafter", "Description: Ingot of copper").description == "Ingot of copper"
     assert Crafter(os.getcwd() + "/name.crafter", "Description: Ingot of copper\n\nAnd of copper\n").description == "Ingot of copper\n\nAnd of copper"
+    assert Crafter(os.getcwd() + "/name.crafter", "Description: Ingot of copper\n\n\n").description == "Ingot of copper"
     from default import DEFAULT_CRAFTER_DESCRIPTION
     from stime import sec_to_time
     a = Crafter(os.getcwd() + "/name.crafter", "This is a text")

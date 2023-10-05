@@ -70,8 +70,9 @@ class Crafter():
                             pass
         try:
             self.description.strip()
-            if len(self.description) > 0 and self.description[-1] == '\n':
+            while len(self.description) > 0 and self.description[-1] == '\n':
                 self.description = self.description[:-1]
+            self.description.strip()
         except AttributeError:
             pass
 
