@@ -40,7 +40,7 @@ def get_crafter() -> list[Crafter]:
         filelist = []
     for path in filelist:
         with open(path) as file:
-            f = file.readlines()
+            f = file.read()
         crafter_list.append(Crafter(path, f))
     if len(crafter_list) < 1:
         import sys

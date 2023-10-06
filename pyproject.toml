@@ -7,5 +7,6 @@ markers = [
     "item: Methods of the item object",
     "inventory: Methods of the inventory object",
     "debug: Debug functions",
+    "loading: Loading of files",
 ]
 addopts = "-p no:warnings --cov=. --cov-report term-missing:skip-covered"
