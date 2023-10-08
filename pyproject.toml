@@ -11,4 +11,4 @@ markers = [
     "print: Printing a clearable text",
     "print: Printing and clearing a clearable text",
 ]
-addopts = "-p no:warnings --cov=. --cov-report term-missing:skip-covered"
+addopts = "-p no:warnings --cov=. --cov-report term-missing:skip-covered --no-cov-on-fail"
