@@ -3,6 +3,7 @@ import debug
 import os
 
 @pytest.mark.usefixtures("tmpdir", "monkeypatch")
+@pytest.hookimpl(tryfirst=True)
 @pytest.mark.debug
 def test_log(tmpdir, monkeypatch):
     monkeypatch.chdir(tmpdir)
