@@ -9,6 +9,6 @@ markers = [
     "debug: Debug functions",
     "loading: Loading of files",
     "print: Printing a clearable text",
-    "print: Printing and clearing a clearable text",
+    "clear: Printing and clearing a clearable text",
 ]
 addopts = "-p no:warnings --cov=. --cov-report term-missing:skip-covered --no-cov-on-fail"
