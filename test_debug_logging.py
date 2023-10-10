@@ -19,15 +19,15 @@ def test_log(tmpdir, monkeypatch):
 #
 # conftest.py
 #
+class It():
+    def __init__(self) -> None:
+        self.data = "Data"
+    def clear(self) -> None:
+        del self.data
 
 @pytest.hookimpl(tryfirst=True)
 @pytest.mark.debug
 def test_conftest_success():
-    class It():
-        def __init__(self) -> None:
-            self.data = "Data"
-        def clear(self) -> None:
-            del self.data
     import conftest
     conftest.Fail = False
     item = It()
@@ -37,11 +37,6 @@ def test_conftest_success():
 @pytest.hookimpl(tryfirst=True)
 @pytest.mark.debug
 def test_conftest_fail():
-    class It():
-        def __init__(self) -> None:
-            self.data = "Data"
-        def clear(self) -> None:
-            del self.data
     import conftest
     conftest.Fail = True
     item = It()
