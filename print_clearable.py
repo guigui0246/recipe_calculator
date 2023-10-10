@@ -10,16 +10,17 @@ class SupportsWrite(Generic[TextIO]):
 global PRINT_BUFFER
 PRINT_BUFFER:dict[SupportsWrite,str] = {}
 
-def print(*args, sep:str | None = " ", end: str | None = "\n", file: SupportsWrite[str] | None = None, flush: Literal[False] = False, **kwargs):
+def print(*args, sep:str | None = " ", end: str | None = "\n", file: SupportsWrite[str] | None = None, flush: Literal[False] = False):
     global PRINT_BUFFER
+    g_file = file
     if file == None:
         file = stdout
     string = ''
     for i,e in enumerate(args):
         if isinstance(e, str):
             string += e
-            continue
-        string += str(e)
+        else:
+            string += str(e)
         if i != len(args) - 1 :
             string += sep if sep else ""
     string += end if end else ""
@@ -27,7 +28,7 @@ def print(*args, sep:str | None = " ", end: str | None = "\n", file: SupportsWri
         PRINT_BUFFER[file] += string
     else:
         PRINT_BUFFER[file] = string
-    return original_print(string, sep=None, end="", flush=flush, file=file)
+    return original_print(string, sep=None, end="", flush=flush, file=g_file)
 
 def input(__prompt, **kwargs):
     global PRINT_BUFFER
@@ -52,12 +53,13 @@ def input(__prompt, **kwargs):
 
 def clear(file:SupportsWrite[str]|None=None, remove_errors:bool=False):
     global PRINT_BUFFER
+    g_file = file
     if file == None:
         file = stdout
     if not file in PRINT_BUFFER.keys():
         return
     try:
-        original_print("\033[F\033[K\r" * PRINT_BUFFER[file].count("\n"), file=file, end="")
+        original_print("\033[F\033[K\r" * PRINT_BUFFER[file].count("\n"), file=g_file, end="")
     except io.UnsupportedOperation:
         original_print("\033[F\033[K\r" * PRINT_BUFFER[file].count("\n"), file=stdout, end="")
         if not remove_errors:
