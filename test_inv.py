@@ -47,6 +47,18 @@ def test_sub_of_item():
     number2 = random.randint(-100, 100)
     assert (Item("name", number1)-number2).n == number1 - number2
 
+@pytest.mark.item
+def test_count():
+    import loader
+    loader.INVENTORY_EXCEPTIONS = []
+    assert loader.separate_number_name("name") == ("name", 1)
+    assert loader.separate_number_name("2xname2x3") == ("name2", 6)
+    assert loader.separate_number_name("2xname2") == ("name2", 2)
+    assert loader.separate_number_name("name3x1x1") == ("name3x1", 1)
+    loader.INVENTORY_EXCEPTIONS = ["name"]
+    with pytest.raises(PermissionError):
+        loader.separate_number_name("name")
+
 #
 # Inventory
 #

@@ -1,5 +1,6 @@
 import pytest
 import loader
+loader.INVENTORY_EXCEPTIONS = []
 import os
 from inventory import Item
 from crafter import Crafter
