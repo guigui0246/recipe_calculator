@@ -61,9 +61,10 @@ def clear(file:SupportsWrite[str]|None=None, remove_errors:bool=False):
     try:
         original_print("\033[F\033[K\r" * PRINT_BUFFER[file].count("\n"), file=g_file, end="")
     except io.UnsupportedOperation:
-        original_print("\033[F\033[K\r" * PRINT_BUFFER[file].count("\n"), file=stdout, end="")
+        import sys
+        original_print("\033[F\033[K\r" * PRINT_BUFFER[file].count("\n"), file=sys.stdout, end="")
         if not remove_errors:
-            original_print(RuntimeWarning("File could not be written for clear! Using stdout."), file=stderr)
+            original_print(RuntimeWarning("File could not be written for clear! Using stdout."), file=sys.stderr)
     del PRINT_BUFFER[file]
 
 def clear_cache(file:SupportsWrite[str]|None=None, all:bool=False):
