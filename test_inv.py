@@ -58,6 +58,7 @@ def test_count():
     loader.INVENTORY_EXCEPTIONS = ["name"]
     with pytest.raises(PermissionError):
         loader.separate_number_name("name")
+    loader.INVENTORY_EXCEPTIONS = []
 
 #
 # Inventory
