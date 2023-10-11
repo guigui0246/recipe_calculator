@@ -22,6 +22,8 @@ def test_results():
 @pytest.mark.recipe_loading
 def test_crafter():
     assert Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven").crafter == ["fast_oven"]
+    assert Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven\t;  slow_oven").crafter == ["fast_oven", "slow_oven"]
+    assert Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven\t;;;  slow_oven").crafter == ["fast_oven", "slow_oven"]
 
 @pytest.mark.recipe_loading
 def test_ressource():
@@ -30,6 +32,7 @@ def test_ressource():
 @pytest.mark.recipe_loading
 def test_crafter_needed():
     assert Recipe(os.getcwd() + "/name.recipe", "Crafter needed: True").crafter_needed == True
+    assert Recipe(os.getcwd() + "/name.recipe", "Crafter needed").crafter_needed == True
     assert Recipe(os.getcwd() + "/name.recipe", "Crafter needed: False").crafter_needed == False
     assert Recipe(os.getcwd() + "/name.recipe", "Name: Here").crafter_needed == False
 
@@ -47,3 +50,11 @@ def test_description():
     from stime import sec_to_time
     a = Recipe(os.getcwd() + "/name.recipe", "This is a text")
     assert a.infos() == a.description == DEFAULT_RECIPE_DESCRIPTION.format(a.name, a.ressources, a.results, a.crafter, "" if a.crafter_needed else "not", sec_to_time(a.duration))
+
+#
+# Utilisation
+#
+
+@pytest.mark.recipe_loading
+def test_repr():
+    repr(Recipe(os.getcwd() + "/name.crafter", f"")) == "name"
