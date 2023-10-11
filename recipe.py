@@ -89,10 +89,7 @@ class Recipe():
         if ressource == None:
             dct = {}
             for i in self.results.keys():
-                try:
-                    dct[i] += self.results[i]
-                except KeyError:
-                    dct[i] = self.results[i]
+                dct[i] = self.results[i]
             for i in self.ressources.keys():
                 try:
                     dct[i] -= self.ressources[i]
@@ -120,10 +117,7 @@ class Recipe():
         if ressource == None:
             dct = {}
             for i in self.ressources.keys():
-                try:
-                    dct[i] += self.ressources[i]
-                except KeyError:
-                    dct[i] = self.ressources[i]
+                dct[i] = self.ressources[i]
             for i in self.results.keys():
                 try:
                     dct[i] -= self.results[i]
