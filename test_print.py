@@ -7,9 +7,9 @@ test_work = set()
 # test clear_cache
 #
 
-@pytest.mark.usefixtures("tmpdir", "monkeypatch")
+@pytest.hookimpl(tryfirst=True)
 @pytest.mark.print
-def test_print_to_file(tmpdir, monkeypatch):
+def test_clear_cache():
     global PRINT_BUFFER
     PRINT_BUFFER["./somefile"] = "Text"
     clear_cache("./somefile")
@@ -47,7 +47,7 @@ def test_print_to_file(tmpdir, monkeypatch):
         txt = f.read()
     txt2 = "This is a test\n"
     assert txt == txt2
-    clear_cache()
+    clear_cache(all=True)
     test_work.add("print_write_to_file")
 
 @pytest.mark.usefixtures("capfd")
@@ -58,7 +58,7 @@ def test_print_to_stdout(capfd):
     txt = capfd.readouterr()[0]
     txt2 = "This is a test\n"
     assert txt == txt2
-    clear_cache()
+    clear_cache(all=True)
     test_work.add("print_write_to_stdout")
 
 @pytest.mark.usefixtures("capfd")
@@ -70,7 +70,7 @@ def test_print_to_stderr(capfd):
     txt = capfd.readouterr()[1]
     txt2 = "This is a test\n"
     assert txt == txt2
-    clear_cache()
+    clear_cache(all=True)
     test_work.add("print_write_to_stderr")
 
 @pytest.mark.usefixtures("capfd")
@@ -82,7 +82,7 @@ def test_multiple_print_to_stdout(capfd):
     txt = capfd.readouterr()[0]
     txt2 = "This is a test\nThis is a test\n"
     assert txt == txt2
-    clear_cache()
+    clear_cache(all=True)
     test_work.add("multi_print_write_to_stdout")
 
 @pytest.mark.usefixtures("capfd")
@@ -93,7 +93,7 @@ def test_non_str_print_to_stdout(capfd):
     txt = capfd.readouterr()[0]
     txt2 = str([1,4,5,6]) + "\n"
     assert txt == txt2
-    clear_cache()
+    clear_cache(all=True)
     test_work.add("non_str_print_to_stdout")
 
 @pytest.mark.usefixtures("capfd")
@@ -104,7 +104,7 @@ def test_multiple_element_print_to_stdout(capfd):
     txt = capfd.readouterr()[0]
     txt2 = "This is a test This is a test\n"
     assert txt == txt2
-    clear_cache()
+    clear_cache(all=True)
     test_work.add("multi_elem_print_write_to_stdout")
 
 #
@@ -123,7 +123,7 @@ def test_clear_to_file(tmpdir, monkeypatch):
     with open("./somefile") as f:
         txt = f.read()
     assert txt == "This is a test\n\033[F\033[K\r"
-    clear_cache()
+    clear_cache(all=True)
 
 @pytest.mark.usefixtures("capfd")
 @pytest.mark.clear
@@ -133,11 +133,10 @@ def test_clear_to_stdout(capfd):
     clear()
     txt = capfd.readouterr()[0]
     assert txt == "This is a test\n\033[F\033[K\r"
-    clear_cache()
+    clear_cache(all=True)
 
 @pytest.mark.usefixtures("capfd")
 @pytest.mark.clear
-#@pytest.mark.skip("Made using stdout (to fix)")
 def test_clear_to_stderr(capfd):
     pytest.mark.skipif("print_write_to_stderr" not in test_work, reason="Cannot write to stderr to clear after")
     import sys
@@ -145,7 +144,7 @@ def test_clear_to_stderr(capfd):
     clear(file=sys.stderr)
     txt = capfd.readouterr()
     assert txt[1]+txt[0] == "This is a test\n\033[F\033[K\r"
-    clear_cache()
+    clear_cache(all=True)
 
 @pytest.mark.usefixtures("capfd", "tmpdir", "monkeypatch")
 @pytest.mark.clear
@@ -155,7 +154,7 @@ def test_clear_error(capfd):
     clear(sys.stdin)
     txt = capfd.readouterr()[1]
     assert "File could not be written for clear! Using stdout." in txt
-    clear_cache()
+    clear_cache(all=True)
 
 @pytest.mark.usefixtures("capfd")
 @pytest.mark.clear
@@ -166,7 +165,7 @@ def test_multiple_clear_to_stdout(capfd):
     clear()
     txt = capfd.readouterr()[0]
     assert txt == "This is a test\nThis is a test\n\033[F\033[K\r\033[F\033[K\r"
-    clear_cache()
+    clear_cache(all=True)
 
 @pytest.mark.usefixtures("capfd")
 @pytest.mark.print
@@ -176,7 +175,7 @@ def test_non_str_print_to_stdout(capfd):
     clear()
     txt = capfd.readouterr()[0]
     assert txt == str([1,4,5,6]) + "\n" + "\033[F\033[K\r"
-    clear_cache()
+    clear_cache(all=True)
 
 @pytest.mark.usefixtures("capfd")
 @pytest.mark.clear
@@ -186,7 +185,7 @@ def test_multiple_element_clear_to_stdout(capfd):
     clear()
     txt = capfd.readouterr()[0]
     assert txt == "This is a test This is a test\n\033[F\033[K\r"
-    clear_cache()
+    clear_cache(all=True)
 
 @pytest.mark.clear
 def test_empty_clear():
@@ -196,4 +195,47 @@ def test_empty_clear():
     f = StringIO()
     clear(f)
     assert PRINT_BUFFER == s
-    clear_cache()
+    clear_cache(all=True)
+
+#
+# test input
+#
+
+def fake_input(__prompt):
+    return "r"
+import print_clearable
+print_clearable.original_input = fake_input
+
+@pytest.mark.usefixtures("capfd")
+@pytest.mark.input
+def test_input(capfd):
+    pytest.mark.skipif("print_write_to_stdout" not in test_work, reason="Cannot write to stdout to clear after")
+    import sys
+    assert "r" == input("This is a test")
+    clear(file=sys.stdin)
+    txt = capfd.readouterr()[0]
+    assert txt[0] == "\033"
+    clear_cache(all=True)
+
+@pytest.mark.usefixtures("capfd")
+@pytest.mark.input
+def test_multiple_input(capfd):
+    pytest.mark.skipif("multi_print_write_to_stdout" not in test_work, reason="Cannot write to stdout to clear after")
+    import sys
+    input("This is a test")
+    input("This is a test")
+    clear(file=sys.stdin)
+    txt = capfd.readouterr()[0]
+    assert txt == "\033[F\033[K\r\033[F\033[K\r"
+    clear_cache(all=True)
+
+@pytest.mark.usefixtures("capfd")
+@pytest.mark.input
+def test_non_str_input(capfd):
+    pytest.mark.skipif("non_str_print_to_stdout" not in test_work, reason="Cannot write to stdout to clear after")
+    import sys
+    input([1,4,5,6])
+    clear(file=sys.stdin)
+    txt = capfd.readouterr()[0]
+    assert txt == "\033[F\033[K\r"
+    clear_cache(all=True)

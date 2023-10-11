@@ -30,7 +30,7 @@ def print(*args, sep:str | None = " ", end: str | None = "\n", file: SupportsWri
         PRINT_BUFFER[file] = string
     return original_print(string, sep=None, end="", flush=flush, file=g_file)
 
-def input(__prompt, **kwargs):
+def input(__prompt):
     global PRINT_BUFFER
     string = ''
     if isinstance(__prompt, str):
@@ -41,10 +41,7 @@ def input(__prompt, **kwargs):
         PRINT_BUFFER[stdout] += string
     else:
         PRINT_BUFFER[stdout] = string
-    try:
-        ret = original_input(string, **kwargs)
-    except EOFError:
-        return None
+    ret = original_input(string)
     if stdin in PRINT_BUFFER.keys():
         PRINT_BUFFER[stdin] += ret+"\n"
     else:
@@ -71,10 +68,7 @@ def clear_cache(file:SupportsWrite[str]|None=None, all:bool=False):
     global PRINT_BUFFER
     if all:
         for i in list(PRINT_BUFFER.keys()):
-            try:
-                del PRINT_BUFFER[i]
-            except:
-                pass
+            del PRINT_BUFFER[i]
         return
     if file == None:
         file = stdout
