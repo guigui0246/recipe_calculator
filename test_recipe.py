@@ -24,8 +24,23 @@ def test_results():
 @pytest.mark.recipe_loading
 def test_crafter():
     assert Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven").crafter == ["fast_oven"]
-    assert Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven\t;  slow_oven").crafter == ["fast_oven", "slow_oven"]
-    assert Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven\t;;;  slow_oven").crafter == ["fast_oven", "slow_oven"]
+    liste2 = ["fast_oven", "slow_oven"]
+    liste2.sort()
+    liste = Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven;slow_oven").crafter
+    liste.sort()
+    assert liste == liste2
+    liste = Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven\tslow_oven").crafter
+    liste.sort()
+    assert liste == liste2
+    liste = Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven slow_oven").crafter
+    liste.sort()
+    assert liste == liste2
+    liste = Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven,slow_oven").crafter
+    liste.sort()
+    assert liste == liste2
+    liste = Recipe(os.getcwd() + "/name.recipe", "Crafter: fast_oven\t;;;  slow_oven").crafter
+    liste.sort()
+    assert liste == liste2
 
 @pytest.mark.recipe_loading
 def test_ressource():
@@ -82,19 +97,19 @@ def test_uses_unknown():
     assert not a.uses("name")
 
 @pytest.mark.recipe
-def test_uses_dict():
+def test_prod_dict():
     a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
     assert a.produce() == {"copper_ingot":1}
     a = Recipe(os.getcwd() + "/name.recipe", "Ressources: 3xcopper_dust copper_ingot 	  	\n  	  	Result:  	  3xcopper_ingot")
     assert a.produce() == {"copper_ingot":2}
 
 @pytest.mark.recipe
-def test_uses_item():
+def test_prod_item():
     a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
     assert a.produce("copper_ingot")
     assert not a.produce("copper_dust")
 
 @pytest.mark.recipe
-def test_uses_unknown():
+def test_prod_unknown():
     a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
     assert not a.produce("name")
