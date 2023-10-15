@@ -20,6 +20,9 @@ def test_results():
     assert Recipe(os.getcwd() + "/name.recipe", "Result: copper_dust").results == {"copper_dust": 1}
     assert Recipe(os.getcwd() + "/name.recipe", "Result: copper_dustx2").results == {"copper_dust": 2}
     assert Recipe(os.getcwd() + "/name.recipe", "Result: copper_dust copper_ingot").results == {"copper_dust": 1, "copper_ingot":1}
+    assert Recipe(os.getcwd() + "/name.recipe", "Result: copper_dust\tcopper_ingot").results == {"copper_dust": 1, "copper_ingot":1}
+    assert Recipe(os.getcwd() + "/name.recipe", "Result: copper_dust;copper_ingot").results == {"copper_dust": 1, "copper_ingot":1}
+    assert Recipe(os.getcwd() + "/name.recipe", "Result: copper_dust,copper_ingot").results == {"copper_dust": 1, "copper_ingot":1}
 
 @pytest.mark.recipe_loading
 def test_crafter():
@@ -47,6 +50,9 @@ def test_ressource():
     assert Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust").ressources == {"copper_dust": 1}
     assert Recipe(os.getcwd() + "/name.recipe", "Ressources: 3xcopper_dust").ressources == {"copper_dust": 3}
     assert Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust copper_ingot").ressources == {"copper_dust": 1, "copper_ingot":1}
+    assert Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust;copper_ingot").ressources == {"copper_dust": 1, "copper_ingot":1}
+    assert Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust\tcopper_ingot").ressources == {"copper_dust": 1, "copper_ingot":1}
+    assert Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust,copper_ingot").ressources == {"copper_dust": 1, "copper_ingot":1}
 
 @pytest.mark.recipe_loading
 def test_crafter_needed():
@@ -64,7 +70,7 @@ def test_duration():
 @pytest.mark.recipe_loading
 def test_description():
     assert Recipe(os.getcwd() + "/name.recipe", "Description: Ingot of copper").description == "Ingot of copper"
-    assert Recipe(os.getcwd() + "/name.recipe", "Description: Ingot of copper\n\nAnd of copper\n").description == "Ingot of copper\n\nAnd of copper"
+    assert Recipe(os.getcwd() + "/name.recipe", "Description: Ingot of copper\n\nAnd of copper\n\n\n").description == "Ingot of copper\n\nAnd of copper"
     from default import DEFAULT_RECIPE_DESCRIPTION
     from stime import sec_to_time
     a = Recipe(os.getcwd() + "/name.recipe", "This is a text")
@@ -90,11 +96,19 @@ def test_uses_item():
     a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
     assert a.uses("copper_dust")
     assert not a.uses("copper_ingot")
+    a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust 2xcopper_ingot 	  	\n  	  	Result:  	  copper_ingot")
+    assert a.uses("copper_ingot")
 
 @pytest.mark.recipe
 def test_uses_unknown():
     a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
     assert not a.uses("name")
+
+@pytest.mark.recipe
+def test_uses_neg():
+    a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
+    a.ressources["copper_dust"] = 0
+    assert not a.uses("copper_dust")
 
 @pytest.mark.recipe
 def test_prod_dict():
@@ -108,8 +122,16 @@ def test_prod_item():
     a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
     assert a.produce("copper_ingot")
     assert not a.produce("copper_dust")
+    a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust copper_ingot 	  	\n  	  	Result:  	  2xcopper_ingot")
+    assert a.produce("copper_ingot")
 
 @pytest.mark.recipe
 def test_prod_unknown():
     a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
     assert not a.produce("name")
+
+@pytest.mark.recipe
+def test_prod_neg():
+    a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
+    a.results["copper_ingot"] = 0
+    assert not a.produce("copper_ingot")
