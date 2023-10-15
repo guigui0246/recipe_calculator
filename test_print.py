@@ -14,6 +14,8 @@ def test_clear_cache():
     PRINT_BUFFER["./somefile"] = "Text"
     clear_cache("./somefile")
     assert PRINT_BUFFER == {}
+    clear_cache("./somefile")
+    assert PRINT_BUFFER == {}
     PRINT_BUFFER["./somefile"] = "Text"
     PRINT_BUFFER["./someotherfile"] = "Tet"
     clear_cache(all=True)
@@ -154,6 +156,14 @@ def test_clear_error(capfd):
     clear(sys.stdin)
     txt = capfd.readouterr()[1]
     assert "File could not be written for clear! Using stdout." in txt
+    with pytest.raises(KeyError):
+        PRINT_BUFFER[sys.stdin]
+    PRINT_BUFFER[sys.stdin] = "this\n"
+    clear(sys.stdin, True)
+    txt = capfd.readouterr()[1]
+    assert not "File could not be written for clear! Using stdout." in txt
+    with pytest.raises(KeyError):
+        PRINT_BUFFER[sys.stdin]
     clear_cache(all=True)
 
 @pytest.mark.usefixtures("capfd")
