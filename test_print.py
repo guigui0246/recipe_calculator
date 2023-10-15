@@ -169,7 +169,7 @@ def test_multiple_clear_to_stdout(capfd):
 
 @pytest.mark.usefixtures("capfd")
 @pytest.mark.print
-def test_non_str_print_to_stdout(capfd):
+def test_non_str_clear_to_stdout(capfd):
     pytest.mark.skipif("non_str_print_to_stdout" not in test_work, reason="Cannot write to stdout to clear after")
     print([1,4,5,6])
     clear()
