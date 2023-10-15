@@ -95,7 +95,7 @@ class Recipe():
                     dct[i] -= self.ressources[i]
                 except KeyError:
                     dct[i] = -self.ressources[i]
-            for i in dct.keys():
+            for i in list(dct.keys()):
                 if dct[i] <= 0:
                     dct.pop(i)
             return dct
@@ -123,7 +123,7 @@ class Recipe():
                     dct[i] -= self.results[i]
                 except KeyError:
                     dct[i] = -self.results[i]
-            for i in dct.keys():
+            for i in list(dct.keys()):
                 if dct[i] <= 0:
                     dct.pop(i)
             return dct

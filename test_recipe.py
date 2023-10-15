@@ -18,6 +18,8 @@ def test_info():
 @pytest.mark.recipe_loading
 def test_results():
     assert Recipe(os.getcwd() + "/name.recipe", "Result: copper_dust").results == {"copper_dust": 1}
+    assert Recipe(os.getcwd() + "/name.recipe", "Result: copper_dustx2").results == {"copper_dust": 2}
+    assert Recipe(os.getcwd() + "/name.recipe", "Result: copper_dust copper_ingot").results == {"copper_dust": 1, "copper_ingot":1}
 
 @pytest.mark.recipe_loading
 def test_crafter():
@@ -28,6 +30,8 @@ def test_crafter():
 @pytest.mark.recipe_loading
 def test_ressource():
     assert Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust").ressources == {"copper_dust": 1}
+    assert Recipe(os.getcwd() + "/name.recipe", "Ressources: 3xcopper_dust").ressources == {"copper_dust": 3}
+    assert Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust copper_ingot").ressources == {"copper_dust": 1, "copper_ingot":1}
 
 @pytest.mark.recipe_loading
 def test_crafter_needed():
@@ -55,6 +59,42 @@ def test_description():
 # Utilisation
 #
 
-@pytest.mark.recipe_loading
+@pytest.mark.recipe
 def test_repr():
     repr(Recipe(os.getcwd() + "/name.crafter", f"")) == "name"
+
+@pytest.mark.recipe
+def test_uses_dict():
+    a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
+    assert a.uses() == {"copper_dust":1}
+    a = Recipe(os.getcwd() + "/name.recipe", "Ressources: 3xcopper_dust  	  	\n  	  	Result:  	  3xcopper_ingot copper_dust")
+    assert a.uses() == {"copper_dust":2}
+
+@pytest.mark.recipe
+def test_uses_item():
+    a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
+    assert a.uses("copper_dust")
+    assert not a.uses("copper_ingot")
+
+@pytest.mark.recipe
+def test_uses_unknown():
+    a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
+    assert not a.uses("name")
+
+@pytest.mark.recipe
+def test_uses_dict():
+    a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
+    assert a.produce() == {"copper_ingot":1}
+    a = Recipe(os.getcwd() + "/name.recipe", "Ressources: 3xcopper_dust copper_ingot 	  	\n  	  	Result:  	  3xcopper_ingot")
+    assert a.produce() == {"copper_ingot":2}
+
+@pytest.mark.recipe
+def test_uses_item():
+    a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
+    assert a.produce("copper_ingot")
+    assert not a.produce("copper_dust")
+
+@pytest.mark.recipe
+def test_uses_unknown():
+    a = Recipe(os.getcwd() + "/name.recipe", "Ressources: copper_dust  	  	\n  	  	Result:  	  copper_ingot")
+    assert not a.produce("name")

@@ -3,6 +3,7 @@ markers = [
     "time_to_sec: Change time string to float",
     "sec_to_time: Change float to time string",
     "recipe_loading: Loading of the recipe object",
+    "recipe: Recipe object",
     "crafter_loading: Loading of the crafter object",
     "item: Methods of the item object",
     "inventory: Methods of the inventory object",
