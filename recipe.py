@@ -36,19 +36,39 @@ class Recipe():
             if i.startswith("Ressources:") or (last == "ressource" and not i.startswith("Name:") and not i.startswith("Ressources:") and not i.startswith("Result:") and not i.startswith("Crafter:") and not i.startswith("Crafter needed:") and not i.startswith("Duration:")):
                 last = "ressource"
                 from loader import separate_number_name
-                key,value = separate_number_name(i.removeprefix("Ressources:").strip())
-                try:
-                    self.ressources[key] += value
-                except KeyError:
-                    self.ressources[key] = value
+                liste = i.removeprefix("Ressources:").strip().split(",")
+                for e in liste:
+                    if ";" in e:
+                        liste.remove(e)
+                        liste += e.strip().split(";")
+                for e in liste:
+                    if " " in e or "\t" in e:
+                        liste.remove(e)
+                        liste += e.strip().split()
+                for e in liste:
+                    key,value = separate_number_name(e)
+                    try:
+                        self.ressources[key] += value
+                    except KeyError:
+                        self.ressources[key] = value
             if i.startswith("Result:") or (last == "result" and not i.startswith("Name:") and not i.startswith("Ressources:") and not i.startswith("Result:") and not i.startswith("Crafter:") and not i.startswith("Crafter needed:") and not i.startswith("Duration:")):
                 last = "result"
                 from loader import separate_number_name
-                key,value = separate_number_name(i.removeprefix("Result:").strip())
-                try:
-                    self.results[key] += value
-                except KeyError:
-                    self.results[key] = value
+                liste = i.removeprefix("Result:").strip().split(",")
+                for e in liste:
+                    if ";" in e:
+                        liste.remove(e)
+                        liste += e.strip().split(";")
+                for e in liste:
+                    if " " in e or "\t" in e:
+                        liste.remove(e)
+                        liste += e.strip().split()
+                for e in liste:
+                    key,value = separate_number_name(e)
+                    try:
+                        self.results[key] += value
+                    except KeyError:
+                        self.results[key] = value
             if i.startswith("Crafter:") or (last == "crafter" and not i.startswith("Name:") and not i.startswith("Ressources:") and not i.startswith("Result:") and not i.startswith("Crafter:") and not i.startswith("Crafter needed:") and not i.startswith("Duration:")):
                 last = "crafter"
                 liste = i.removeprefix("Crafter:").strip().split(",")
@@ -56,6 +76,10 @@ class Recipe():
                     if ";" in e:
                         liste.remove(e)
                         liste += e.strip().split(";")
+                for e in liste:
+                    if " " in e or "\t" in e:
+                        liste.remove(e)
+                        liste += e.strip().split()
                 self.crafter += liste
             if i.startswith("Crafter needed:"):
                 last = "crafter_need"
