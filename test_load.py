@@ -2,6 +2,7 @@ import pytest
 import loader
 loader.INVENTORY_EXCEPTIONS = []
 import os
+from recipe import Recipe
 from inventory import Item
 from crafter import Crafter
 
@@ -28,6 +29,23 @@ def test_crafter_load_nothing(tmpdir, monkeypatch, capfd):
     monkeypatch.chdir(tmpdir)
     loader.get_crafter()
     assert capfd.readouterr()[1] == "Aucune machine trouvée\n"
+
+@pytest.mark.usefixtures("tmpdir", "monkeypatch")
+@pytest.mark.loading
+def test_recipe_load(tmpdir, monkeypatch):
+    monkeypatch.chdir(tmpdir)
+    tmpdir.mkdir("recipe")
+    with open(os.path.join(".", "recipe", "name.recipe"), "w") as f:
+        f.write("")
+    assert str(loader.get_recipes()) == str([Recipe(os.path.join(os.getcwd(), "recipe", "name.recipe"), "")])
+
+@pytest.mark.usefixtures("tmpdir", "monkeypatch", "capfd")
+@pytest.mark.loading
+def test_recipe_load_nothing(tmpdir, monkeypatch, capfd):
+    monkeypatch.chdir(tmpdir)
+    with pytest.raises(SystemExit):
+        loader.get_recipes()
+    assert capfd.readouterr()[1] == "Aucune recette trouvée\n"
 
 @pytest.mark.usefixtures("capfd")
 @pytest.mark.loading
